@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WLT Project</title>
+  <style>
+    :root {
+      --bg-1: #071a26;
+      --bg-2: #0d2f3f;
+      --bg-3: #16516c;
+      --text: #f4fbff;
+      --muted: #b2d1df;
+      --accent: #ffbf69;
+      --accent-2: #2ec4b6;
+      --panel: rgba(255, 255, 255, 0.08);
+      --panel-border: rgba(255, 255, 255, 0.22);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 8% 10%, #ffbf6930, transparent 40%),
+        radial-gradient(circle at 90% 25%, #2ec4b633, transparent 35%),
+        linear-gradient(140deg, var(--bg-1), var(--bg-2), var(--bg-3));
+      display: grid;
+      place-items: center;
+      padding: 2rem;
+      overflow: hidden;
+    }
+
+    .shell {
+      width: min(920px, 100%);
+      border: 1px solid var(--panel-border);
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      border-radius: 22px;
+      padding: clamp(1.4rem, 2.2vw, 2.4rem);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      animation: rise 800ms ease both;
+    }
+
+    h1 {
+      font-size: clamp(1.7rem, 4vw, 3rem);
+      letter-spacing: 0.02em;
+      margin-bottom: 0.7rem;
+    }
+
+    h1 span {
+      color: var(--accent);
+    }
+
+    p {
+      color: var(--muted);
+      max-width: 62ch;
+      line-height: 1.55;
+      margin-bottom: 1.6rem;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.9rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.6rem;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 0.8rem 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 120ms ease, filter 180ms ease;
+    }
+
+    .primary {
+      background: linear-gradient(90deg, var(--accent), #ffd79c);
+      color: #3a2100;
+    }
+
+    .secondary {
+      background: linear-gradient(90deg, var(--accent-2), #8ce1da);
+      color: #07332d;
+    }
+
+    button:hover {
+      filter: brightness(1.05);
+      transform: translateY(-2px);
+    }
+
+    .grid {
+      display: grid;
+      gap: 0.8rem;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .card {
+      border: 1px solid var(--panel-border);
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      padding: 1rem;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .value {
+      font-size: 1.45rem;
+      font-weight: 800;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <h1>Welcome to <span>WLT Project</span></h1>
+    <p>
+      This is your root index page. It is responsive, dynamic, and ready for customization.
+      Use the buttons to interact with the live counters below.
+    </p>
+
+    <div class="actions">
+      <button class="primary" id="addVisitors">Add Visitor</button>
+      <button class="secondary" id="addLikes">Add Like</button>
+    </div>
+
+    <section class="grid">
+      <article class="card">
+        <div class="label">Visitors</div>
+        <div class="value" id="visitors">0</div>
+      </article>
+      <article class="card">
+        <div class="label">Likes</div>
+        <div class="value" id="likes">0</div>
+      </article>
+      <article class="card">
+        <div class="label">Current Time</div>
+        <div class="value" id="clock">--:--:--</div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const visitorsEl = document.getElementById("visitors");
+    const likesEl = document.getElementById("likes");
+    const clockEl = document.getElementById("clock");
+
+    let visitors = 0;
+    let likes = 0;
+
+    document.getElementById("addVisitors").addEventListener("click", () => {
+      visitors += 1;
+      visitorsEl.textContent = String(visitors);
+    });
+
+    document.getElementById("addLikes").addEventListener("click", () => {
+      likes += 1;
+      likesEl.textContent = String(likes);
+    });
+
+    function tickClock() {
+      const now = new Date();
+      clockEl.textContent = now.toLocaleTimeString();
+    }
+
+    tickClock();
+    setInterval(tickClock, 1000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Counter Button</title>
+  <style>
+    :root {
+      --bg-a: #0b132b;
+      --bg-b: #1c2541;
+      --bg-c: #3a506b;
+      --ink: #f4f7fb;
+      --muted: #c6d2e2;
+      --hot: #5bc0be;
+      --warm: #ffd166;
+      --danger: #ef476f;
+      --card: rgba(255, 255, 255, 0.1);
+      --card-border: rgba(255, 255, 255, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 20% 20%, #5bc0be22, transparent 35%),
+                  radial-gradient(circle at 80% 10%, #ffd16622, transparent 30%),
+                  linear-gradient(135deg, var(--bg-a), var(--bg-b), var(--bg-c));
+      overflow: hidden;
+    }
+
+    .wrap {
+      width: min(92vw, 540px);
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+      animation: riseIn 700ms ease both;
+    }
+
+    h1 {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.04em;
+    }
+
+    p {
+      color: var(--muted);
+      margin-bottom: 1.4rem;
+    }
+
+    .count {
+      font-size: clamp(2.3rem, 9vw, 4.2rem);
+      font-weight: 800;
+      margin: 0.2rem 0 1.2rem;
+      color: var(--warm);
+      text-shadow: 0 0 20px #ffd16655;
+      transition: transform 150ms ease;
+    }
+
+    .count.pop {
+      transform: scale(1.12);
+    }
+
+    .main-btn {
+      width: 100%;
+      padding: 1rem 1.1rem;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(90deg, var(--hot), #77d6d5);
+      color: #09222a;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 120ms ease, box-shadow 200ms ease, filter 200ms ease;
+      box-shadow: 0 10px 24px #5bc0be55;
+    }
+
+    .main-btn:hover {
+      filter: brightness(1.05);
+      transform: translateY(-2px);
+    }
+
+    .main-btn:active {
+      transform: translateY(1px) scale(0.99);
+    }
+
+    .actions {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
+
+    .secondary {
+      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--ink);
+      padding: 0.8rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 150ms ease;
+    }
+
+    .secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .danger {
+      border-color: #ef476f66;
+      color: #ffd9e2;
+    }
+
+    .hint {
+      margin-top: 1rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .spark {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      pointer-events: none;
+      background: var(--warm);
+      animation: fly 650ms ease forwards;
+      box-shadow: 0 0 12px #ffd166aa;
+    }
+
+    @keyframes riseIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes fly {
+      to {
+        transform: translate(var(--x), var(--y)) scale(0.25);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Counter Button</h1>
+    <p>Press the button to increase the counter.</p>
+
+    <div class="count" id="count">0</div>
+    <button class="main-btn" id="countBtn">+1 Count</button>
+
+    <div class="actions">
+      <button class="secondary" id="minusBtn">-1</button>
+      <button class="secondary danger" id="resetBtn">Reset</button>
+    </div>
+
+    <div class="hint">Tip: Hit spacebar to count fast.</div>
+  </main>
+
+  <script>
+    const countEl = document.getElementById("count");
+    const countBtn = document.getElementById("countBtn");
+    const minusBtn = document.getElementById("minusBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    let count = 0;
+
+    function render() {
+      countEl.textContent = String(count);
+      countEl.classList.add("pop");
+      setTimeout(() => countEl.classList.remove("pop"), 120);
+    }
+
+    function sparkBurst(x, y, amount) {
+      for (let i = 0; i < amount; i++) {
+        const spark = document.createElement("span");
+        spark.className = "spark";
+        spark.style.left = `${x}px`;
+        spark.style.top = `${y}px`;
+        const dx = (Math.random() - 0.5) * 120;
+        const dy = (Math.random() - 0.5) * 120;
+        spark.style.setProperty("--x", `${dx}px`);
+        spark.style.setProperty("--y", `${dy}px`);
+        document.body.appendChild(spark);
+        setTimeout(() => spark.remove(), 700);
+      }
+    }
+
+    countBtn.addEventListener("click", (event) => {
+      count += 1;
+      render();
+      sparkBurst(event.clientX, event.clientY, 10);
+    });
+
+    minusBtn.addEventListener("click", () => {
+      count -= 1;
+      render();
+    });
+
+    resetBtn.addEventListener("click", () => {
+      count = 0;
+      render();
+    });
+
+    window.addEventListener("keydown", (event) => {
+      if (event.code === "Space") {
+        event.preventDefault();
+        count += 1;
+        render();
+      }
+    });
+  </script>
+</body>
+</html>
